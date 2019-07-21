@@ -8,7 +8,7 @@ const emailService = require('./email');
 
 module.exports = {
 
-    optimize: function (targetCity, date, myHourPrice, literPer100k, myEmailAdress) {
+    optimize: function (targetCity, date, myHourCost, literPer100k, myEmailAddress) {
         let bahnPrice = dbapi.getPrice(targetCity, date);
         let flightPrice = swissapi.getPrice(targetCity, date);
         let currentDieselPrice = benzinapi.getPricePerLitre('diesel', targetCity);
@@ -21,7 +21,7 @@ module.exports = {
         };
 
         let options = [bahnPrice, flightPrice, carPrice].map((obj) => {
-            obj.perceivedCost = obj.duration * myHourPrice / 60 + obj.price;
+            obj.perceivedCost = obj.duration * myHourCost / 60 + obj.price;
             return obj;
         });
 
@@ -35,6 +35,6 @@ module.exports = {
             }
         });
 
-        emailService.sendMail(myEmailAdress, 'Best Travel Option', best);
+        emailService.sendMail(myEmailAddress, 'Best Travel Option', best);
     }
 };
