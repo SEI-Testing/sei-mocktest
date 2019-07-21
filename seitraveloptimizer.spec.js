@@ -6,7 +6,7 @@ describe('SEI Travel optimzer optimizes my journey to the next camp', () => {
         traveloptimizer = require('./seitraveloptimizer');
     });
 
-    it('should suggest the car if train and flight are very expensice', ()=> {
+    it('should suggest the car if train and flight are very expensive', ()=> {
 
         traveloptimizer.optimize('München', new Date(), 30, 'reto@blunschi.ch');
 
