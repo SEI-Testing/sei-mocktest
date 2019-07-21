@@ -8,34 +8,34 @@ const emailService = require('./email');
 
 module.exports = {
 
-    optimize: function (targetCity, date, myHourPrice, myEmailAdress) {
+    optimize: function (targetCity, date, myHourPrice, literPer100k, myEmailAdress) {
         let bahnPrice = dbapi.getPrice(targetCity, date);
         let flightPrice = swissapi.getPrice(targetCity, date);
-        let currentDieselPrice = benzinapi.getPricePerLitre('diesel', targetcity);
-        let routeByCar = routingapi.getRoute('Zürich', 'Munich');
+        let currentDieselPrice = benzinapi.getPricePerLitre('diesel', targetCity);
+        let routeByCar = routingapi.getRoute('Zürich', targetCity);
 
         let carPrice = {
             type: 'car',
-            durationInMinutes: routeByCar.duration,
-            price: routeByCar.distance * currentDieselPrice
+            duration: routeByCar.duration,
+            price: routeByCar.distance / 100 % literPer100k * currentDieselPrice
         };
 
         let options = [bahnPrice, flightPrice, carPrice].map((obj) => {
-            obj.perceivedCost = obj.durationInMinutes * myHourPrice / 60 + obj.price;
+            obj.perceivedCost = obj.duration * myHourPrice / 60 + obj.price;
             return obj;
         });
 
         let best = {
-            perceivedCost: Number.NEGATIVE_INFINITY
+            perceivedCost: Number.POSITIVE_INFINITY
         };
 
         options.forEach((opt) => {
+            console.log(opt);
             if (opt.perceivedCost < best.perceivedCost) {
                 best = opt;
             }
         });
 
-        emailService.sendMail(myEmailAdress, 'Best Travel Option', 'The best travel option to go to ' + targetcity +
-            ' on: ' + date + ' is to go by ' + best.type + ': ' + JSON.stringify(best));
+        emailService.sendMail(myEmailAdress, 'Best Travel Option', best);
     }
 };
