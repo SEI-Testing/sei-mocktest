@@ -25,7 +25,7 @@ module.exports = {
         // expect an Object: {duration: Number in Minutes, distance: Number in km}
         let routeByCar = routingapi.getRoute('Zürich', targetCity);
 
-        // calculate the car price: Diesel-Price + 0.5c per km for the car
+        // calculate the car price: Diesel-Price * km + 0.5c per km for the car
         let carPrice = {
             type: 'car',
             duration: routeByCar.duration,
