@@ -1,0 +1,22 @@
+{
+  "name": "sei-mocktest",
+  "version": "1.0.0",
+  "description": "simple excercise to use mocks in a unit test",
+  "main": "seitraveloptimizer.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SEI-Testing/sei-mocktest.git"
+  },
+  "author": "Reto Blunschi <reto.blunschi@youpers.com> (http://www.youpers.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SEI-Testing/sei-mocktest/issues"
+  },
+  "homepage": "https://github.com/SEI-Testing/sei-mocktest#readme",
+  "devDependencies": {
+    "testdouble": "^3.12.2"
+  }
+}
