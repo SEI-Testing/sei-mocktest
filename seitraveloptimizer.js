@@ -17,7 +17,7 @@ module.exports = {
         let carPrice = {
             type: 'car',
             duration: routeByCar.duration,
-            price: routeByCar.distance / 100 % literPer100k * currentDieselPrice
+            price: routeByCar.distance / 100 * literPer100k * currentDieselPrice + routeByCar.distance * 0.5
         };
 
         let options = [bahnPrice, flightPrice, carPrice].map((obj) => {
