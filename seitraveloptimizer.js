@@ -6,26 +6,36 @@ const routingapi = require('./googlemapswrapper');
 const emailService = require('./email');
 
 
-module.exports = function(targetcity, date, myHourPrice, myEmailAdress) {
-    let bahnPrice = dbapi.getPrice(targetCity, date);
-    let flightPrice = swissapi.getPrice(targetCity, date);
-    let currentDieselPrice = benzinapi.getPricePreLitre('diesel', targetcity);
-    let routeByCar = routingapi.getRoute('Zürich', 'Munich');
+module.exports = {
 
-    let carPrice = {
-        type: 'car',
-        duration: routeByCar.duration,
-        price: routeByCar.distance * currentDieselPrice
-    };
+    optimize: function (targetCity, date, myHourPrice, myEmailAdress) {
+        let bahnPrice = dbapi.getPrice(targetCity, date);
+        let flightPrice = swissapi.getPrice(targetCity, date);
+        let currentDieselPrice = benzinapi.getPricePerLitre('diesel', targetcity);
+        let routeByCar = routingapi.getRoute('Zürich', 'Munich');
 
-    let options = [bahnPrice, flightPrice, carPrice].map((obj) => {obj.cost = obj.duration * myHourPrice / 60 + obj.price; return obj;});
+        let carPrice = {
+            type: 'car',
+            durationInMinutes: routeByCar.duration,
+            price: routeByCar.distance * currentDieselPrice
+        };
 
-    let best = {
-        cost: Number.NEGATIVE_INFINITY
-    };
+        let options = [bahnPrice, flightPrice, carPrice].map((obj) => {
+            obj.perceivedCost = obj.durationInMinutes * myHourPrice / 60 + obj.price;
+            return obj;
+        });
 
-    options.forEach((opt) => {if (opt.cost < best.cost) {best = opt;}});
+        let best = {
+            perceivedCost: Number.NEGATIVE_INFINITY
+        };
 
-    emailService.sendMail(myEmailAdress, 'Best Travel Option', 'The best travel option to go to ' + targetcity +
-        ' on: ' + date + ' is to go by ' + best.type + '. ' + JSON.stringify(best));
+        options.forEach((opt) => {
+            if (opt.perceivedCost < best.perceivedCost) {
+                best = opt;
+            }
+        });
+
+        emailService.sendMail(myEmailAdress, 'Best Travel Option', 'The best travel option to go to ' + targetcity +
+            ' on: ' + date + ' is to go by ' + best.type + ': ' + JSON.stringify(best));
+    }
 };

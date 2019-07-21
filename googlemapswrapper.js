@@ -1,5 +1,5 @@
 module.exports = {
-    getPrice: ()=> {
+    getRoute: ()=> {
         throw new Error('remote connecntion not available');
     }
 
