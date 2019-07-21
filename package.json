@@ -4,7 +4,7 @@
   "description": "simple excercise to use mocks in a unit test",
   "main": "seitraveloptimizer.js",
   "scripts": {
-    "test": "jasmine"
+    "test": "jasmine --config=jasmine.json"
   },
   "repository": {
     "type": "git",

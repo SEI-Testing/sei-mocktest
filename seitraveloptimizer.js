@@ -30,7 +30,6 @@ module.exports = {
         };
 
         options.forEach((opt) => {
-            console.log(opt);
             if (opt.perceivedCost < best.perceivedCost) {
                 best = opt;
             }
